@@ -3,6 +3,7 @@ defmodule Homecooked.Posts do
   alias Homecooked.Posts.Post
   alias Homecooked.Users.User
   import Ecto.Query, only: [from: 2]
+  require Logger
 
   def create_post(attrs, user) do
     share_token = Base.encode16(:rand.bytes(16), case: :lower)
@@ -50,6 +51,8 @@ defmodule Homecooked.Posts do
   defp upload_file(temp_file) do
     basename = Path.basename(temp_file)
     destination = Path.join([:code.priv_dir(:homecooked), "static", "uploads", basename])
+
+    Logger.info("Storing uploaded file to #{destination}")
 
     case File.cp(temp_file, destination) do
       :ok -> {:ok, "/uploads/#{basename}"}
