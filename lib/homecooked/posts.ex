@@ -31,7 +31,9 @@ defmodule Homecooked.Posts do
          {:ok, uploaded_file_url} <- upload_file(temp_file) do
       {:ok, uploaded_file_url}
     else
-      _ -> {:error, "Error uploading image."}
+      error ->
+        Logger.error("Error when uploading image: #{error}")
+        {:error, "Error uploading image."}
     end
   end
 

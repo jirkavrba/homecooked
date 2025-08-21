@@ -97,7 +97,7 @@ defmodule Homecooked.Users do
         |> Repo.insert()
 
       case stored_following do
-        {:ok, _following} -> {:ok, user}
+        {:ok, _following} -> {:ok, followed_user}
         {:error, error} -> {:error, error}
       end
     else
