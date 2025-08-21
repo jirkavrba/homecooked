@@ -90,6 +90,9 @@
             <div class="text-sm text-base-400">@{post.user.username}</div>
           </figcaption>
         </div>
+        <div class="text-xs text-muted">
+          {relative_time(post.inserted_at)}
+        </div>
       </div>
     </div>
   </div>

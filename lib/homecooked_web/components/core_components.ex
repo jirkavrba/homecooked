@@ -404,6 +404,22 @@ defmodule HomecookedWeb.CoreComponents do
     )
   end
 
+  def relative_time(%DateTime{} = reference) do
+    now = DateTime.utc_now()
+    minutes = DateTime.diff(now, reference, :minute)
+
+    dbg(minutes)
+
+    cond do
+      minutes < 5 -> "Před chvilkou"
+      minutes < 60 -> "Před #{minutes} m"
+      minutes < 60 * 24 -> "Před #{div(minutes, 60)} h"
+      minutes < 60 * 24 * 7 -> "Před #{div(minutes, 60 * 24)} d"
+      minutes < 60 * 24 * 356 -> "Před #{div(minutes, 60 * 24 * 7)} t"
+      true ->  "Před #{div(minutes, 60 * 24 * 356)} r"
+    end
+  end
+
   @doc """
   Translates an error message using gettext.
   """
