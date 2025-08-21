@@ -48,18 +48,12 @@ defmodule Homecooked.Posts do
   end
 
   defp upload_file(temp_file) do
-    form = %{
-      UPLOADCARE_STORE: 1,
-      UPLOADCARE_PUB_KEY: System.get_env("UPLOADCARE_API_PUBLIC_KEY"),
-      file: File.stream!(temp_file)
-    }
+    basename = Path.basename(temp_file)
+    destination = Path.join([:code.priv_dir(:homecooked), "static", "uploads", basename])
 
-    case Req.post("https://upload.uploadcare.com/base/", form_multipart: form) |> dbg() do
-      {:ok, %Req.Response{status: 200, body: %{"file" => file_id}}} ->
-        {:ok, "https://ucarecdn.com/#{file_id}/"}
-
-      _ ->
-        {:error, "Error uploading file to uploadcare."}
+    case File.cp(temp_file, destination) do
+      :ok -> {:ok, "/uploads/#{basename}"}
+      {:error, _posix} -> {:error, "Error copying file."}
     end
   end
 
