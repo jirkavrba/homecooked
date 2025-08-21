@@ -1,0 +1,58 @@
+<Layouts.app user={@user}>
+  <div class="card card-border bg-base-100 border-base-300 w-full">
+    <div class="card-body items-center">
+      <div class="avatar">
+        <div class="w-24 rounded-full">
+          <img src={@user.avatar_url} />
+        </div>
+      </div>
+      <div class="flex flex-row items-center gap-2">
+        <h1 class="card-title">{@user.display_name}</h1>
+      </div>
+      <div class="card-actions flex-col items-center mt-2">
+        <p>Momentálně sleduješ {length(@user.followed_users)} uživatelů.</p>
+
+        <div :if={length(@user.followed_users) > 0} class="avatar-group -space-x-6">
+          <div :for={followed_user <- @user.followed_users} class="avatar">
+            <div class="w-8">
+              <img src={followed_user.avatar_url} title={followed_user.display_name} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-border bg-base-100 border-base-300 w-full">
+    <div class="card-body">
+      <.form for={@form} phx-submit="start_following" class="flex flex-col gap-2">
+        <h2 class="card-title self-center">Zadej kód pro sledování ostatních</h2>
+        <.input
+          field={@form[:follow_code]}
+          class="input input-xl font-mono font-bold tracking-[1rem] w-full text-center"
+          name="follow_code"
+          minlength="6"
+          maxlength="6"
+          required
+        />
+        <button class="btn btn-primary py-6" phx-disable-with="Odesílám...">
+          Začít sledovat
+        </button>
+      </.form>
+
+      <div class="divider">NEBO</div>
+
+      <h2 class="card-title self-center">Pošli ostatním tvůj kód pro sledování</h2>
+      <div class="join w-full">
+        <input
+          class="input input-xl join-item font-mono font-bold tracking-[1rem] text-center w-full"
+          readonly
+          value={@user.follow_code}
+        />
+        <button class="btn btn-xl join-item" phx-click="regenerate_follow_code">
+          <.icon name="hero-arrow-path" />
+        </button>
+      </div>
+    </div>
+  </div>
+</Layouts.app>

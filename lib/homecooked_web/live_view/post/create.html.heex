@@ -1,0 +1,154 @@
+<Layouts.app user={@user}>
+  <h1 class="text-xl font-bold text-center">Přidat nový příspěvek</h1>
+
+  <.form for={@form} phx-change="validate" phx-submit="save">
+    <fieldset class="fieldset">
+      <legend class="label">
+        Obrázek <span class="text-red-500">*</span>
+      </legend>
+      <div class={Enum.any?(@uploads.image.entries) && "hidden"}>
+        <.live_file_input
+          class="file-input file-input-primary w-full"
+          upload={@uploads.image}
+        />
+        <label class="label mt-1">Maximální velikost 10 MB</label>
+      </div>
+
+      <section phx-drop-target={@uploads.image.ref}>
+        <article :for={entry <- @uploads.image.entries} class="flex flex-col gap-2">
+          <figure>
+            <.live_img_preview entry={entry} class="image rounded-xl border-2" />
+          </figure>
+
+          <progress :if={entry.progress < 100} class="progress" value={entry.progress} max="100">
+            {entry.progress}%
+          </progress>
+
+          <button
+            type="button"
+            class="btn"
+            phx-click="cancel_image_upload"
+            phx-value-ref={entry.ref}
+            aria-label="cancel"
+          >
+            Chci vybrat jiný obrázek
+          </button>
+        </article>
+      </section>
+    </fieldset>
+
+    <.input
+      field={@form[:title]}
+      label="Název"
+      placeholder="Svíčková se šesti"
+      required={true}
+    />
+
+    <.input
+      field={@form[:description]}
+      type="textarea"
+      label="Popis"
+      placeholder="Byla to fakt chálka kamarádi"
+    />
+
+    <.input
+      field={@form[:rating]}
+      type="select"
+      label="Hodnocení"
+      options={[Nevybráno: nil, "★": 1, "★★": 2, "★★★": 3, "★★★★": 4, "★★★★★": 5]}
+    />
+
+    <section class="fieldset flex flex-col gap-2 my-4">
+      <legend class="label">
+        Ingredience
+      </legend>
+      <div :for={{ingredient, index} <- Enum.with_index(@ingredients)} class="w-full">
+        <div class="join w-full">
+          <label class="input join-item w-full">
+            <input
+              type="text"
+              placeholder="Cibule"
+              name="ingredients[]"
+              value={ingredient}
+              phx-change="update_ingredients"
+            />
+          </label>
+          <button
+            class="btn btn-soft join-item"
+            type="button"
+            phx-click="delete_ingredient"
+            phx-value-index={index}
+          >
+            <.icon name="hero-trash" />
+          </button>
+        </div>
+      </div>
+
+      <button phx-click="add_ingredient" type="button" class="btn w-full">
+        <.icon name="hero-shopping-bag" /> Přidat ingredienci
+      </button>
+    </section>
+
+    <section class="fieldset flex flex-col gap-2 my-4">
+      <legend class="label">
+        Recept
+      </legend>
+      <div :for={{step, index} <- Enum.with_index(@recipe_steps)} class="w-full">
+        <div class="join w-full">
+          <label class="input join-item w-full">
+            {index + 1}.
+            <input
+              type="text"
+              placeholder="Nakrájim cibuli"
+              name="recipe_steps[]"
+              value={step}
+              phx-change="update_recipe_steps"
+            />
+          </label>
+          <button
+            class="btn btn-soft join-item"
+            type="button"
+            phx-click="delete_recipe_step"
+            phx-value-index={index}
+          >
+            <.icon name="hero-trash" />
+          </button>
+        </div>
+      </div>
+
+      <button phx-click="add_recipe_step" type="button" class="btn w-full">
+        <.icon name="hero-pencil-square" /> Přidat krok receptu
+      </button>
+    </section>
+
+    <.input
+      field={@form[:price_czk_per_portion]}
+      type="number"
+      label="Cena za porci"
+      placeholder="80"
+    />
+
+    <.input
+      field={@form[:kcal_per_portion]}
+      type="number"
+      label="Kalorie na porci"
+      placeholder="450"
+    />
+
+    <.input
+      field={@form[:preparation_time_minutes]}
+      type="number"
+      label="Doba přípravy v minutách"
+      placeholder="20"
+    />
+
+    <button
+      type="submit"
+      class="btn btn-primary w-full mt-4"
+      disabled={not @valid?}
+      phx-disable-with="Přidávám příspěvek..."
+    >
+      Přidat
+    </button>
+  </.form>
+</Layouts.app>

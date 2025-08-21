@@ -1,0 +1,115 @@
+<Layouts.app user={@user}>
+  <div id="feed" phx-update="stream" class="flex flex-col gap-4 items-center">
+    <div
+      :for={{id, post} <- @streams.feed}
+      id={id}
+      class="card card-border bg-base-100 border-base-300 w-full"
+    >
+      <figure>
+        <img src={post.image_url} alt={post.title} />
+      </figure>
+      <div class="card-body gap-4">
+        <div :if={post.rating} class="rating rating-xs">
+          <div
+            class="mask mask-star-2 bg-primary"
+            aria-label="1 star"
+            aria-current={post.rating == 1 && "true"}
+          />
+          <div
+            class="mask mask-star-2 bg-primary"
+            aria-label="2 star"
+            aria-current={post.rating == 2 && "true"}
+          />
+          <div
+            class="mask mask-star-2 bg-primary"
+            aria-label="3 star"
+            aria-current={post.rating == 3 && "true"}
+          />
+          <div
+            class="mask mask-star-2 bg-primary"
+            aria-label="4 star"
+            aria-current={post.rating == 4 && "true"}
+          />
+          <div
+            class="mask mask-star-2 bg-primary"
+            aria-label="5 star"
+            aria-current={post.rating == 5 && "true"}
+          />
+        </div>
+
+        <h1 class="card-title">{post.title}</h1>
+        <p :if={post.description}>{post.description}</p>
+
+        <div class="flex flex-row flex-wrap gap-2">
+          <div :if={not is_nil(post.price_czk_per_portion)} class="badge badge rounded">
+            <.icon name="hero-banknotes" />
+            {post.price_czk_per_portion} Kč
+          </div>
+          <div :if={not is_nil(post.kcal_per_portion)} class="badge badge rounded">
+            <.icon name="hero-fire" /> {post.kcal_per_portion} kcal
+          </div>
+          <div :if={not is_nil(post.preparation_time_minutes)} class="badge badge rounded">
+            <.icon name="hero-clock" />
+            {post.preparation_time_minutes} min
+          </div>
+        </div>
+
+        <div :if={post.ingredients_list} class="collapse collapse-arrow bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title font-semibold">Ingredience</div>
+          <div class="collapse-content text-sm flex flex-row flex-wrap gap-2">
+            <span
+              :for={ingredient <- String.split(post.ingredients_list, "\n")}
+              class="badge badge-lg badge-primary"
+            >
+              {ingredient}
+            </span>
+          </div>
+        </div>
+
+        <div :if={post.recipe} class="collapse collapse-arrow bg-base-200">
+          <input type="checkbox" />
+          <div class="collapse-title font-semibold">Recept</div>
+          <div class="collapse-content text-sm">
+            <ol class="steps steps-vertical">
+              <li :for={step <- String.split(post.recipe, "\n")} class="step step-primary">
+                <strong>{step}</strong>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="flex flex-row items-center gap-4 w-full">
+          <div class="avatar">
+            <div class="size-8 rounded-full">
+              <img src={post.user.avatar_url} />
+            </div>
+          </div>
+          <figcaption class="flex flex-col">
+            <h1 class="font-bold">{post.user.display_name}</h1>
+            <div class="text-sm text-base-400">@{post.user.username}</div>
+          </figcaption>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button :if={not @reached_end} phx-click="load_more_posts" class="btn btn-light w-full">
+    Načíst další
+  </button>
+
+  <div :if={@reached_end} class="flex flex-col items-center gap-2 py-8 bg-base-200 rounded-xl">
+    <.icon name="hero-archive-box" class="size-8 text-neutral-400" />
+    <h1 class="text-md font-bold text-center text-neutral-500">Žádné další příspěvky</h1>
+    <p class="text-center text-neutral-500">
+      Abys viděl/a příspěvky ostatních, začni je sledovat pomocí kódu v
+      <a href={~p"/app/profile"} class="link link-accent">nastavení profilu.</a>
+    </p>
+  </div>
+
+  <div class="z-1 fixed left-0 right-0 bottom-0 px-8 py-6 backdrop-blur-md w-full shadow-2xl">
+    <a href={~p"/app/create"} class="btn btn-primary w-full">
+      <span class="dock-label">Přidat příspěvek</span>
+    </a>
+  </div>
+</Layouts.app>
