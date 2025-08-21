@@ -1,4 +1,4 @@
-<Layouts.app user={@user}>
+<Layouts.app user={@user} flash={@flash}>
   <div class="card card-border bg-base-100 border-base-300 w-full">
     <div class="card-body items-center">
       <div class="avatar">
@@ -14,7 +14,7 @@
 
         <div :if={length(@user.followed_users) > 0} class="avatar-group -space-x-6">
           <div :for={followed_user <- @user.followed_users} class="avatar">
-            <div class="w-8">
+            <div class="w-8 bg-base-300">
               <img src={followed_user.avatar_url} title={followed_user.display_name} />
             </div>
           </div>

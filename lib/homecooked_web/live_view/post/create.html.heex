@@ -1,4 +1,4 @@
-<Layouts.app user={@user}>
+<Layouts.app user={@user} flash={@flash}>
   <h1 class="text-xl font-bold text-center">Přidat nový příspěvek</h1>
 
   <.form for={@form} phx-change="validate" phx-submit="save">

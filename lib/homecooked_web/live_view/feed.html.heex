@@ -1,4 +1,4 @@
-<Layouts.app user={@user}>
+<Layouts.app user={@user} flash={@flash}>
   <div id="feed" phx-update="stream" class="flex flex-col gap-4 items-center">
     <div
       :for={{id, post} <- @streams.feed}

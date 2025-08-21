@@ -27,6 +27,8 @@ defmodule HomecookedWeb.Layouts do
   """
   attr :user, :map, required: true
 
+  attr :flash, :map, required: true
+
   slot :inner_block, required: true
 
   def app(assigns) do
