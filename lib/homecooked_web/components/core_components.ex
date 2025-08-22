@@ -408,8 +408,6 @@ defmodule HomecookedWeb.CoreComponents do
     now = DateTime.utc_now()
     minutes = DateTime.diff(now, reference, :minute)
 
-    dbg(minutes)
-
     cond do
       minutes < 5 -> "Před chvilkou"
       minutes < 60 -> "Před #{minutes} m"
