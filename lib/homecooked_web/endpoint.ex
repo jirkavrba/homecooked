@@ -8,7 +8,8 @@ defmodule HomecookedWeb.Endpoint do
     store: :cookie,
     key: "_homecooked_key",
     signing_salt: "6o9H4eD2",
-    same_site: "Lax"
+    same_site: "Lax",
+    max_age: 365 * 24 * 60 * 60 # 1 year
   ]
 
   socket "/live", Phoenix.LiveView.Socket,
