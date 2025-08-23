@@ -37,17 +37,4 @@ defmodule HomecookedWeb.LiveView.Profile do
         {:noreply, socket}
     end
   end
-
-  def handle_event("regenerate_follow_code", _params, socket) do
-    case Users.regenerate_follow_code_for(socket.assigns.user) do
-      {:ok, updated_user} ->
-        {:noreply,
-         socket
-         |> update(:user, fn user -> %{user | follow_code: updated_user.follow_code} end)
-         |> assign(:form, to_form(%{"follow_code" => ""}))}
-
-      _ ->
-        {:noreply, assign(socket, :form, to_form(%{"follow_code" => ""}))}
-    end
-  end
 end

@@ -28,11 +28,10 @@
       <.form for={@form} phx-submit="start_following" class="flex flex-col gap-2">
         <h2 class="card-title self-center">Zadej kód pro sledování ostatních</h2>
         <.input
+          type="number"
           field={@form[:follow_code]}
           class="input input-xl font-mono font-bold tracking-[1rem] w-full text-center"
           name="follow_code"
-          minlength="6"
-          maxlength="6"
           required
         />
         <button class="btn btn-primary py-6" phx-disable-with="Odesílám...">
@@ -49,9 +48,6 @@
           readonly
           value={@user.follow_code}
         />
-        <button class="btn btn-xl join-item" phx-click="regenerate_follow_code">
-          <.icon name="hero-arrow-path" />
-        </button>
       </div>
     </div>
   </div>

@@ -70,19 +70,6 @@ defmodule Homecooked.Users do
     |> Repo.insert()
   end
 
-  @spec regenerate_follow_code_for(%User{}) :: {:ok, %User{}} | {:error, term()}
-  def regenerate_follow_code_for(%User{} = user) do
-    new_follow_code = generate_follow_code()
-
-    attrs = %{
-      follow_code: new_follow_code
-    }
-
-    user
-    |> User.changeset(attrs)
-    |> Repo.update()
-  end
-
   @spec start_following_with_code(%User{}, binary()) :: {:ok, %User{}} | {:error, term()}
   def start_following_with_code(%User{} = user, follow_code) do
     with {:ok, followed_user} <- find_by_follow_code(follow_code) do
